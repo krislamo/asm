@@ -15,3 +15,6 @@ _start:
     mov     ebx, 1      ; write to the STDOUT file
     mov     eax, 4      ; invoke SYS_WRITE (kernel opcode 4)
     int     80h
+    mov     ebx, 0      ; return 0
+    mov     eax, 1      ; SYS_EXIT
+    int     80h
