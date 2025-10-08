@@ -10,8 +10,22 @@ SECTION .text
 global  _start
 
 _start:
-    mov     ebx, msg        ; move the address of our message string into EBX
-    mov     eax, ebx        ; move the address in EBX into EAX as well (Both now point to the same segment in memory)
+    mov     eax, msg
+    call    strlen
+
+    mov     edx, eax        ; our function leaves the result in EAX
+    mov     ecx, msg
+    mov     ebx, 1          ; STDOUT
+    mov     eax, 4          ; SYS_WRITE
+    int     80h
+
+    mov     ebx, 0          ; return 0
+    mov     eax, 1          ; SYS_EXIT
+    int     80h
+
+strlen:
+    push    ebx             ; preserve EBX while we use in this function
+    mov     ebx, eax        ; move the address in EAX into EBX
 
 nextchar:
     cmp     byte [eax], 0   ; compare the byte pointed to by EAX at this address against zero (Zero is an end of string delimiter)
@@ -20,17 +34,6 @@ nextchar:
     jmp     nextchar        ; jump to the point in the code labeled 'nextchar'
 
 finished:
-    sub     eax, ebx        ; subtract the address in EBX from the address in EAX
-                            ; remember both registers started pointing to the same address (see line 15)
-                            ; but EAX has been incremented one byte for each character in the message string
-                            ; when you subtract one memory address from another of the same type
-                            ; the result is number of segments between them - in this case the number of bytes
-
-    mov     edx, eax        ; EAX now equals the number of bytes in our string
-    mov     ecx, msg        ; move the memory address of our message string into ecx
-    mov     ebx, 1          ; write to the STDOUT file
-    mov     eax, 4          ; invoke SYS_WRITE (kernel opcode 4)
-    int     80h
-    mov     ebx, 0          ; return 0
-    mov     eax, 1          ; SYS_EXIT
-    int     80h
+    sub     eax, ebx
+    pop     ebx
+    ret
