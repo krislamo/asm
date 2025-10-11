@@ -1,6 +1,7 @@
 .PHONY: all clean
 
 SRC := $(wildcard *.asm)
+SRC := $(filter-out functions.asm, $(SRC))
 OBJDIR := build
 OBJS := $(SRC:%.asm=$(OBJDIR)/%.o)
 BINS := $(SRC:%.asm=$(OBJDIR)/%)
