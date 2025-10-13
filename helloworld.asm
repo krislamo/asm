@@ -1,8 +1,8 @@
 %include        'functions.asm'
 
 section .data
-msg1     db      "Hello, world!", 0Ah
-msg2     db      "Display a line of text", 0Ah
+msg1     db      "Hello, world!", 0x0A, 0x00
+msg2     db      "Display a line of text", 0x0A, 0x00
 
 section .text
 global _start
